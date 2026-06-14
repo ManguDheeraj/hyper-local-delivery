@@ -18,7 +18,7 @@ export default function ProtectedRoute() {
     return <Navigate to="/login" replace />;
   }
 
-  if (user.role === 'rider' && !location.pathname.startsWith('/orders')) {
+  if (user.role === 'rider' && !location.pathname.startsWith('/orders') && !location.pathname.startsWith('/map')) {
     return <Navigate to="/orders" replace />;
   }
 

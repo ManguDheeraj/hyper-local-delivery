@@ -74,7 +74,7 @@ export default function Sidebar() {
         </div>
 
         <nav className="sidebar-nav">
-          {NAV_ITEMS.filter((item) => user?.role === 'admin' || item.to === '/orders').map((item) => {
+          {NAV_ITEMS.filter((item) => user?.role === 'admin' || item.to === '/orders' || item.to === '/map').map((item) => {
             const Icon = item.icon;
             const isActive =
               item.to === '/'
