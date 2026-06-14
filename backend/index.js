@@ -119,13 +119,13 @@ io.on('connection', (socket) => {
 // ── Production: serve frontend static files ─────────────────────────────
 if (NODE_ENV === 'production') {
   const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
-  app.use(express.static(frontendPath));
+  //app.use(express.static(frontendPath));
 
   // SPA catch-all – send index.html for any non-API route
-  app.get('*', (_req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
-  });
-}
+ // app.get('*', (_req, res) => {
+   // res.sendFile(path.join(frontendPath, 'index.html'));
+ // });
+};
 
 // ── 404 handler for unknown API routes ──────────────────────────────────
 app.use('/api/*', (_req, res) => {
