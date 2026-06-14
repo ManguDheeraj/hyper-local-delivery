@@ -36,7 +36,13 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Allowed origins for CORS (comma-separated in env, or sensible defaults)
 const ALLOWED_ORIGINS = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+  ? process.env.CORS_ORIGIN.split(',').map((o) => {
+      try {
+        return new URL(o.trim()).origin;
+      } catch {
+        return o.trim().replace(/\/+$/, '');
+      }
+    })
   : ['http://localhost:5173', 'http://localhost:3000'];
 
 // ── Express + HTTP server ───────────────────────────────────────────────
