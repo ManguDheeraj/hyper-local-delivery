@@ -5,7 +5,7 @@ import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from 'react-icons/h
 export default function LoginForm() {
   const { login, register } = useAuth();
   const [isRegister, setIsRegister] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'admin' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'admin', phone: '', vehicleType: 'bike' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -20,7 +20,7 @@ export default function LoginForm() {
     setError('');
     try {
       if (isRegister) {
-        await register(form.name, form.email, form.password, form.role);
+        await register(form.name, form.email, form.password, form.role, form.phone, form.vehicleType);
       } else {
         await login(form.email, form.password);
       }
@@ -143,6 +143,39 @@ export default function LoginForm() {
               <option value="rider">Rider</option>
             </select>
           </div>
+        )}
+
+        {isRegister && form.role === 'rider' && (
+          <>
+            <div className="form-group" style={{ marginBottom: 'var(--space-4)' }}>
+              <label className="form-label" htmlFor="login-phone">Phone Number</label>
+              <input
+                id="login-phone"
+                name="phone"
+                type="text"
+                className="form-input"
+                placeholder="+91 98765 43210"
+                value={form.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group" style={{ marginBottom: 'var(--space-4)' }}>
+              <label className="form-label" htmlFor="login-vehicle">Vehicle Type</label>
+              <select
+                id="login-vehicle"
+                name="vehicleType"
+                className="form-select"
+                value={form.vehicleType}
+                onChange={handleChange}
+              >
+                <option value="bike">Bike</option>
+                <option value="scooter">Scooter</option>
+                <option value="bicycle">Bicycle</option>
+                <option value="car">Car</option>
+              </select>
+            </div>
+          </>
         )}
 
         <button
