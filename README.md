@@ -92,5 +92,6 @@ Navigate to `http://localhost:5173` in your browser. Create an Admin account to 
 - **Frontend**: Designed to be deployed on Vercel or Netlify. Set the `VITE_API_URL` environment variable to your deployed backend URL.
 - **Backend**: Designed to be deployed on Render, Heroku, or DigitalOcean. Ensure `CORS_ORIGIN` is set to your deployed frontend domain (e.g., `https://your-frontend.vercel.app`).
 
-## 📝 License
-This project is licensed under the MIT License.
+## Final Deployment Link
+
+hyper-local-delivery-eight.vercel.app
