@@ -24,7 +24,7 @@ export default function OrdersPage() {
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const socket = useSocket();
 
   const fetchOrders = useCallback(async () => {
@@ -34,18 +34,12 @@ export default function OrdersPage() {
       const res = await getOrders(params);
       const data = res.data?.data || res.data?.orders || res.data || [];
       setOrders(Array.isArray(data) ? data : []);
-      
-      // Update selected order details if it's currently open
-      if (selectedOrder) {
-        const updated = Array.isArray(data) ? data.find(o => o._id === selectedOrder._id) : null;
-        if (updated) setSelectedOrder(updated);
-      }
     } catch (err) {
       console.error('Fetch orders error:', err);
     } finally {
       setLoading(false);
     }
-  }, [activeTab, selectedOrder]);
+  }, [activeTab]);
 
   const fetchRiders = useCallback(async () => {
     try {
@@ -90,7 +84,7 @@ export default function OrdersPage() {
   };
 
   const handleCardClick = (order) => {
-    setSelectedOrder(order);
+    setSelectedOrderId(order._id);
     setDetailsModalOpen(true);
   };
 
@@ -102,6 +96,8 @@ export default function OrdersPage() {
       (o.orderNumber || o._id || '').toLowerCase().includes(q)
     );
   });
+
+  const selectedOrder = selectedOrderId ? orders.find(o => o._id === selectedOrderId) : null;
 
   return (
     <div className="page-container" id="orders-page">

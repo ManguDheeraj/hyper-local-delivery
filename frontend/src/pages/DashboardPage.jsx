@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const [recentOrders, setRecentOrders] = useState([]);
   const [riders, setRiders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const socket = useSocket();
 
@@ -52,11 +52,6 @@ export default function DashboardPage() {
 
       setRecentOrders(ordersList.slice(0, 5));
       setRiders(ridersList);
-
-      if (selectedOrder) {
-        const updated = ordersList.find(o => o._id === selectedOrder._id);
-        if (updated) setSelectedOrder(updated);
-      }
 
       if (statsRes?.data) {
         const s = statsRes.data.stats || statsRes.data.data || statsRes.data;
@@ -99,7 +94,7 @@ export default function DashboardPage() {
   }, [socket]);
 
   const handleOrderClick = (order) => {
-    setSelectedOrder(order);
+    setSelectedOrderId(order._id);
     setDetailsModalOpen(true);
   };
 
@@ -110,6 +105,8 @@ export default function DashboardPage() {
       </div>
     );
   }
+
+  const selectedOrder = selectedOrderId ? recentOrders.find(o => o._id === selectedOrderId) : null;
 
   return (
     <div className="page-container" id="dashboard-page">
