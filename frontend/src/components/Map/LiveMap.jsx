@@ -107,46 +107,62 @@ export default function LiveMap({ riders = [], onRiderClick, height = '100%' }) 
           fullscreenControl: false,
         }}
       >
-        {riders
-          .filter((r) => r.location?.coordinates || r.currentLocation)
-          .map((rider) => {
-            const coords = rider.location?.coordinates || rider.currentLocation?.coordinates;
-            if (!coords) return null;
-            const pos = { lat: coords[1], lng: coords[0] };
-            const isOnline = rider.isOnline || rider.isAvailable;
-            return (
-              <Marker
-                key={rider._id}
-                position={pos}
-                onClick={() => handleMarkerClick(rider)}
-                icon={{
-                  path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z',
-                  fillColor: isOnline ? '#7c3aed' : '#64748b',
-                  fillOpacity: 1,
-                  strokeWeight: 2,
-                  strokeColor: '#fff',
-                  scale: 1.5,
-                  anchor: { x: 12, y: 22 },
-                }}
-              />
-            );
-          })}
+        {riders.map((rider) => {
+          let pos = null;
+          if (rider.currentLocation && rider.currentLocation.lat != null && rider.currentLocation.lng != null) {
+            pos = { lat: rider.currentLocation.lat, lng: rider.currentLocation.lng };
+          } else if (rider.location && rider.location.lat != null && rider.location.lng != null) {
+            pos = { lat: rider.location.lat, lng: rider.location.lng };
+          } else if (rider.location?.coordinates) {
+            pos = { lat: rider.location.coordinates[1], lng: rider.location.coordinates[0] };
+          }
 
-        {selected && (
-          <InfoWindow
-            position={{
-              lat: (selected.location?.coordinates || selected.currentLocation?.coordinates)?.[1] || 0,
-              lng: (selected.location?.coordinates || selected.currentLocation?.coordinates)?.[0] || 0,
-            }}
-            onCloseClick={() => setSelected(null)}
-          >
-            <div className="map-infowindow">
-              <strong>{selected.name}</strong>
-              <p>{selected.isOnline ? '🟢 Online' : '⚫ Offline'}</p>
-              {selected.currentOrder && <p>Order: #{selected.currentOrder}</p>}
-            </div>
-          </InfoWindow>
-        )}
+          if (!pos) return null;
+
+          const isOnline = rider.isOnline || rider.isAvailable;
+          return (
+            <Marker
+              key={rider._id}
+              position={pos}
+              onClick={() => handleMarkerClick(rider)}
+              icon={{
+                path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z',
+                fillColor: isOnline ? '#7c3aed' : '#64748b',
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: '#fff',
+                scale: 1.5,
+                anchor: { x: 12, y: 22 },
+              }}
+            />
+          );
+        })}
+
+        {selected && (() => {
+          let selectedPos = null;
+          if (selected.currentLocation && selected.currentLocation.lat != null) {
+            selectedPos = { lat: selected.currentLocation.lat, lng: selected.currentLocation.lng };
+          } else if (selected.location && selected.location.lat != null) {
+            selectedPos = { lat: selected.location.lat, lng: selected.location.lng };
+          } else if (selected.location?.coordinates) {
+            selectedPos = { lat: selected.location.coordinates[1], lng: selected.location.coordinates[0] };
+          }
+
+          if (!selectedPos) return null;
+
+          return (
+            <InfoWindow
+              position={selectedPos}
+              onCloseClick={() => setSelected(null)}
+            >
+              <div className="map-infowindow">
+                <strong>{selected.name}</strong>
+                <p>{selected.isOnline ? '🟢 Online' : '⚫ Offline'}</p>
+                {selected.currentOrder && <p>Order: #{selected.currentOrder}</p>}
+              </div>
+            </InfoWindow>
+          );
+        })()}
       </GoogleMap>
     </div>
   );
