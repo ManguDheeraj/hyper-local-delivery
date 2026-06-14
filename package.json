@@ -1,0 +1,19 @@
+{
+  "name": "hyper-local-delivery",
+  "version": "1.0.0",
+  "description": "Hyper-Local Delivery Dispatcher - Internal tool for local stores to manage delivery staff",
+  "type": "module",
+  "scripts": {
+    "install-all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "cd backend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && node index.js",
+    "seed": "cd backend && node seed.js",
+    "render-build": "cd backend && npm install && cd ../frontend && npm install && npm run build"
+  },
+  "keywords": ["delivery", "dispatch", "mern", "real-time", "tracking"],
+  "author": "",
+  "license": "ISC"
+}

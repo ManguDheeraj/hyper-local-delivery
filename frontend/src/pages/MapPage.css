@@ -1,0 +1,90 @@
+/* ============================================================
+   MapPage Styles
+   ============================================================ */
+
+.map-page {
+  position: relative;
+  height: calc(100vh - var(--header-height));
+  display: flex;
+}
+
+.map-page-map {
+  flex: 1;
+}
+
+/* Side Panel */
+.map-page-panel {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 280px;
+  max-height: calc(100% - var(--space-8));
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.map-page-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.map-page-panel-header h4 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-sm);
+}
+
+.map-page-panel-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-2);
+}
+
+.map-page-rider-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--border-radius-md);
+  transition: background var(--transition-fast);
+  text-align: left;
+}
+
+.map-page-rider-item:hover,
+.map-page-rider-item.selected {
+  background: rgba(124, 58, 237, 0.1);
+}
+
+.map-page-rider-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.map-page-rider-name {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .map-page-panel {
+    width: 100%;
+    bottom: 0;
+    right: 0;
+    top: auto;
+    max-height: 50%;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  }
+}

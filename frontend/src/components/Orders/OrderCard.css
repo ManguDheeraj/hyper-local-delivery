@@ -1,0 +1,101 @@
+/* ============================================================
+   OrderCard Styles
+   ============================================================ */
+
+.order-card {
+  position: relative;
+  padding: var(--space-5);
+  overflow: hidden;
+  animation: fadeInUp var(--transition-slow) ease-out both;
+}
+
+.order-card-border {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 16px 0 0 16px;
+}
+
+.order-card-border--pending { background: var(--warning); }
+.order-card-border--assigned { background: var(--info); }
+.order-card-border--dispatched { background: var(--info); }
+.order-card-border--picked-up,
+.order-card-border--in-transit { background: var(--accent-primary); }
+.order-card-border--delivered { background: var(--success); }
+.order-card-border--cancelled { background: var(--danger); }
+
+.order-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.order-card-header > div {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.order-card-number {
+  font-weight: 600;
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+}
+
+.order-card-amount {
+  font-weight: 700;
+  font-size: var(--font-lg);
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.order-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.order-card-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+}
+
+.order-card-row svg {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.order-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-3);
+}
+
+.order-card-items {
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
+}
+
+.order-card-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.order-card-select {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-xs);
+  border-radius: var(--border-radius-sm);
+  min-width: 100px;
+}

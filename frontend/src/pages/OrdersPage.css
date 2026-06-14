@@ -1,0 +1,41 @@
+/* ============================================================
+   OrdersPage Styles
+   ============================================================ */
+
+.orders-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.orders-page-filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.orders-page-search {
+  position: relative;
+  max-width: 400px;
+}
+
+.orders-page-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 768px) {
+  .orders-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .orders-page-search {
+    max-width: 100%;
+  }
+}

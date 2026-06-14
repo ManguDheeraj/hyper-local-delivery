@@ -1,0 +1,47 @@
+/* ============================================================
+   EarningsChart Styles
+   ============================================================ */
+
+.earnings-chart {
+  padding: var(--space-5);
+}
+
+.earnings-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.earnings-chart-header h4 {
+  font-size: var(--font-lg);
+  font-weight: 600;
+}
+
+.earnings-chart-body {
+  width: 100%;
+}
+
+/* Custom tooltip */
+.chart-tooltip {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-lg);
+}
+
+.chart-tooltip-label {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.chart-tooltip-value {
+  font-size: var(--font-md);
+  font-weight: 700;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
