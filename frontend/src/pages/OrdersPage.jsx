@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import OrderList from '../components/Orders/OrderList';
 import CreateOrderModal from '../components/Orders/CreateOrderModal';
+import OrderDetailsModal from '../components/Orders/OrderDetailsModal';
 import { getOrders, getRiders, createOrder, assignRider, updateOrderStatus } from '../services/api';
 import useSocket from '../hooks/useSocket';
 import { HiOutlinePlus, HiOutlineSearch } from 'react-icons/hi';
@@ -22,6 +23,8 @@ export default function OrdersPage() {
   const [activeTab, setActiveTab] = useState('');
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const socket = useSocket();
 
   const fetchOrders = useCallback(async () => {
@@ -31,12 +34,18 @@ export default function OrdersPage() {
       const res = await getOrders(params);
       const data = res.data?.data || res.data?.orders || res.data || [];
       setOrders(Array.isArray(data) ? data : []);
+      
+      // Update selected order details if it's currently open
+      if (selectedOrder) {
+        const updated = Array.isArray(data) ? data.find(o => o._id === selectedOrder._id) : null;
+        if (updated) setSelectedOrder(updated);
+      }
     } catch (err) {
       console.error('Fetch orders error:', err);
     } finally {
       setLoading(false);
     }
-  }, [activeTab]);
+  }, [activeTab, selectedOrder]);
 
   const fetchRiders = useCallback(async () => {
     try {
@@ -78,6 +87,11 @@ export default function OrdersPage() {
   const handleStatusChange = async (orderId, status) => {
     await updateOrderStatus(orderId, status);
     fetchOrders();
+  };
+
+  const handleCardClick = (order) => {
+    setSelectedOrder(order);
+    setDetailsModalOpen(true);
   };
 
   const filtered = orders.filter((o) => {
@@ -147,15 +161,23 @@ export default function OrdersPage() {
             riders={riders}
             onAssign={handleAssign}
             onStatusChange={handleStatusChange}
+            onCardClick={handleCardClick}
           />
         )}
       </div>
 
-      {/* Modal */}
+      {/* Create Order Modal */}
       <CreateOrderModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleCreate}
+      />
+
+      {/* Order Details Modal */}
+      <OrderDetailsModal 
+        open={detailsModalOpen} 
+        order={selectedOrder} 
+        onClose={() => setDetailsModalOpen(false)} 
       />
     </div>
   );

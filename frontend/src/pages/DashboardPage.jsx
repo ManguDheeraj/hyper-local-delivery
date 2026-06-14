@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import StatsCards from '../components/Dashboard/StatsCards';
 import EarningsChart from '../components/Dashboard/EarningsChart';
 import LiveMap from '../components/Map/LiveMap';
+import OrderDetailsModal from '../components/Orders/OrderDetailsModal';
 import { getOrders, getOrderStats, getRiders } from '../services/api';
 import useSocket from '../hooks/useSocket';
 import {
@@ -26,6 +27,8 @@ export default function DashboardPage() {
   const [recentOrders, setRecentOrders] = useState([]);
   const [riders, setRiders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const socket = useSocket();
 
   const fetchData = async () => {
@@ -49,6 +52,11 @@ export default function DashboardPage() {
 
       setRecentOrders(ordersList.slice(0, 5));
       setRiders(ridersList);
+
+      if (selectedOrder) {
+        const updated = ordersList.find(o => o._id === selectedOrder._id);
+        if (updated) setSelectedOrder(updated);
+      }
 
       if (statsRes?.data) {
         const s = statsRes.data.stats || statsRes.data.data || statsRes.data;
@@ -89,6 +97,11 @@ export default function DashboardPage() {
       socket.off('riderLocationUpdate', refresh);
     };
   }, [socket]);
+
+  const handleOrderClick = (order) => {
+    setSelectedOrder(order);
+    setDetailsModalOpen(true);
+  };
 
   if (loading) {
     return (
@@ -140,7 +153,11 @@ export default function DashboardPage() {
                   {recentOrders.map((order) => {
                     const statusClass = order.status?.replace(/\s+/g, '-').toLowerCase() || 'pending';
                     return (
-                      <tr key={order._id}>
+                      <tr 
+                        key={order._id} 
+                        onClick={() => handleOrderClick(order)}
+                        className="clickable-row"
+                      >
                         <td style={{ fontWeight: 500, color: 'var(--text-primary)' }}>
                           #{order.orderNumber || order._id?.slice(-6)}
                         </td>
@@ -173,6 +190,12 @@ export default function DashboardPage() {
       <div className="mt-6">
         <EarningsChart />
       </div>
+
+      <OrderDetailsModal 
+        open={detailsModalOpen} 
+        order={selectedOrder} 
+        onClose={() => setDetailsModalOpen(false)} 
+      />
     </div>
   );
 }

@@ -27,6 +27,15 @@
   font-size: var(--font-lg);
 }
 
+.table-container tbody tr.clickable-row {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.table-container tbody tr.clickable-row:hover {
+  background-color: var(--bg-primary);
+}
+
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;

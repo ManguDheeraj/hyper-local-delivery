@@ -14,7 +14,7 @@ const STATUS_LABELS = {
 
 const STATUS_OPTIONS = ['pending', 'assigned', 'dispatched', 'picked-up', 'in-transit', 'delivered', 'cancelled'];
 
-export default function OrderCard({ order, riders = [], onAssign, onStatusChange }) {
+export default function OrderCard({ order, riders = [], onAssign, onStatusChange, onCardClick }) {
   const [assigning, setAssigning] = useState(false);
 
   const statusClass = order.status?.replace(/\s+/g, '-').toLowerCase() || 'pending';
@@ -35,8 +35,17 @@ export default function OrderCard({ order, riders = [], onAssign, onStatusChange
     if (onStatusChange) onStatusChange(order._id, e.target.value);
   };
 
+  const handleCardClick = () => {
+    if (onCardClick) onCardClick(order);
+  };
+
   return (
-    <div className={`order-card glass-card`} id={`order-card-${order._id}`}>
+    <div 
+      className={`order-card glass-card ${onCardClick ? 'clickable' : ''}`} 
+      id={`order-card-${order._id}`}
+      onClick={handleCardClick}
+      style={onCardClick ? { cursor: 'pointer' } : {}}
+    >
       <div className={`order-card-border order-card-border--${statusClass}`} />
 
       <div className="order-card-header">
@@ -74,6 +83,7 @@ export default function OrderCard({ order, riders = [], onAssign, onStatusChange
             <select
               className="form-select order-card-select"
               onChange={(e) => handleAssign(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
               disabled={assigning}
               defaultValue=""
               id={`assign-rider-${order._id}`}
@@ -93,6 +103,7 @@ export default function OrderCard({ order, riders = [], onAssign, onStatusChange
             <select
               className="form-select order-card-select"
               onChange={handleStatus}
+              onClick={(e) => e.stopPropagation()}
               value={order.status}
               id={`update-status-${order._id}`}
             >

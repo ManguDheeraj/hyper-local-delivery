@@ -1,4 +1,5 @@
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { HiOutlineBell, HiOutlineSearch } from 'react-icons/hi';
 import './Header.css';
@@ -13,7 +14,9 @@ const PAGE_TITLES = {
 
 export default function Header() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
+  const [showNotifs, setShowNotifs] = useState(false);
 
   const title =
     PAGE_TITLES[pathname] ||
@@ -23,6 +26,10 @@ export default function Header() {
   const initials = user?.name
     ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
     : 'U';
+
+  const handleProfileClick = () => {
+    navigate('/');
+  };
 
   return (
     <header className="header" id="main-header">
@@ -41,12 +48,35 @@ export default function Header() {
           />
         </div>
 
-        <button className="header-notif btn-icon" id="header-notif-btn" aria-label="Notifications">
-          <HiOutlineBell size={20} />
-          <span className="header-notif-badge">3</span>
-        </button>
+        <div className="header-notif-wrapper" style={{ position: 'relative' }}>
+          <button 
+            className="header-notif btn-icon" 
+            id="header-notif-btn" 
+            aria-label="Notifications"
+            onClick={() => setShowNotifs(!showNotifs)}
+          >
+            <HiOutlineBell size={20} />
+            <span className="header-notif-badge">3</span>
+          </button>
 
-        <div className="avatar" title={user?.name || 'User'}>
+          {showNotifs && (
+            <div className="notif-dropdown">
+              <h4>Recent Notifications</h4>
+              <ul>
+                <li><strong>New Order</strong> #ORD-00040 just arrived</li>
+                <li><strong>Rider Amit</strong> is now online</li>
+                <li><strong>Order Delivered</strong> #ORD-10020 delivered</li>
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div 
+          className="avatar" 
+          title={user?.name || 'User'} 
+          onClick={handleProfileClick} 
+          style={{ cursor: 'pointer' }}
+        >
           {initials}
         </div>
       </div>

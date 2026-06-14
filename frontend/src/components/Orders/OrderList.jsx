@@ -1,7 +1,7 @@
 import OrderCard from './OrderCard';
 import { HiOutlineClipboardList } from 'react-icons/hi';
 
-export default function OrderList({ orders = [], riders = [], onAssign, onStatusChange }) {
+export default function OrderList({ orders = [], riders = [], onAssign, onStatusChange, onCardClick }) {
   if (!orders.length) {
     return (
       <div className="empty-state" id="orders-empty">
@@ -23,6 +23,7 @@ export default function OrderList({ orders = [], riders = [], onAssign, onStatus
             riders={riders}
             onAssign={onAssign}
             onStatusChange={onStatusChange}
+            onCardClick={onCardClick}
           />
         </div>
       ))}
