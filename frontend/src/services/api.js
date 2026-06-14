@@ -1,7 +1,19 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (!envUrl) return '/api/';
+  
+  // Clean up trailing slashes and ensure it ends with /api
+  let cleanUrl = envUrl.trim().replace(/\/+$/, '');
+  if (!cleanUrl.endsWith('/api')) {
+    cleanUrl += '/api';
+  }
+  return cleanUrl + '/';
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: getBaseURL(),
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -32,28 +44,28 @@ api.interceptors.response.use(
 );
 
 /* ── Auth ── */
-export const loginUser = (data) => api.post('/auth/login', data);
-export const registerUser = (data) => api.post('/auth/register', data);
-export const getMe = () => api.get('/auth/me');
+export const loginUser = (data) => api.post('auth/login', data);
+export const registerUser = (data) => api.post('auth/register', data);
+export const getMe = () => api.get('auth/me');
 
 /* ── Orders ── */
-export const getOrders = (params) => api.get('/orders', { params });
-export const getOrderById = (id) => api.get(`/orders/${id}`);
-export const getOrderStats = () => api.get('/orders/stats');
-export const createOrder = (data) => api.post('/orders', data);
+export const getOrders = (params) => api.get('orders', { params });
+export const getOrderById = (id) => api.get(`orders/${id}`);
+export const getOrderStats = () => api.get('orders/stats');
+export const createOrder = (data) => api.post('orders', data);
 export const assignRider = (orderId, riderId) =>
-  api.put(`/orders/${orderId}/assign`, { riderId });
+  api.put(`orders/${orderId}/assign`, { riderId });
 export const updateOrderStatus = (orderId, status) =>
-  api.put(`/orders/${orderId}/status`, { status });
+  api.put(`orders/${orderId}/status`, { status });
 
 /* ── Riders ── */
-export const getRiders = (params) => api.get('/riders', { params });
-export const getRider = (id) => api.get(`/riders/${id}`);
+export const getRiders = (params) => api.get('riders', { params });
+export const getRider = (id) => api.get(`riders/${id}`);
 export const updateRiderLocation = (id, location) =>
-  api.put(`/riders/${id}/location`, { location });
+  api.put(`riders/${id}/location`, { location });
 export const toggleRiderOnline = (id) =>
-  api.put(`/riders/${id}/toggle-online`);
+  api.put(`riders/${id}/toggle-online`);
 export const getRiderEarnings = (id, params) =>
-  api.get(`/riders/${id}/earnings`, { params });
+  api.get(`riders/${id}/earnings`, { params });
 
 export default api;

@@ -7,9 +7,10 @@ export default function useSocket() {
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    const socketUrl = import.meta.env.VITE_API_URL 
-      ? import.meta.env.VITE_API_URL.replace('/api', '') 
-      : window.location.origin;
+    let socketUrl = window.location.origin;
+    if (import.meta.env.VITE_API_URL) {
+      socketUrl = import.meta.env.VITE_API_URL.trim().replace(/\/api\/?$/, '');
+    }
 
     socketRef.current = io(socketUrl, {
       auth: { token },

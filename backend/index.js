@@ -116,6 +116,11 @@ io.on('connection', (socket) => {
   });
 });
 
+// ── 404 handler for unknown API routes ──────────────────────────────────
+app.use('/api/*', (_req, res) => {
+  res.status(404).json({ success: false, message: 'API route not found' });
+});
+
 // ── Production: serve frontend static files ─────────────────────────────
 if (NODE_ENV === 'production') {
   const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
@@ -126,11 +131,6 @@ if (NODE_ENV === 'production') {
    // res.sendFile(path.join(frontendPath, 'index.html'));
  // });
 };
-
-// ── 404 handler for unknown API routes ──────────────────────────────────
-app.use('/api/*', (_req, res) => {
-  res.status(404).json({ success: false, message: 'API route not found' });
-});
 
 // ── Global error handler ────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-vars
