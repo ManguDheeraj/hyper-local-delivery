@@ -17,7 +17,7 @@ export default function RidersPage() {
     email: '',
     password: '',
     phone: '',
-    vehicleType: 'motorcycle',
+    vehicleType: 'bike',
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -58,7 +58,7 @@ export default function RidersPage() {
     try {
       await registerUser({ ...form, role: 'rider' });
       setModalOpen(false);
-      setForm({ name: '', email: '', password: '', phone: '', vehicleType: 'motorcycle' });
+      setForm({ name: '', email: '', password: '', phone: '', vehicleType: 'bike' });
       fetchRiders();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to add rider');
@@ -173,7 +173,8 @@ export default function RidersPage() {
                   value={form.vehicleType}
                   onChange={handleChange}
                 >
-                  <option value="motorcycle">Motorcycle</option>
+                  <option value="bike">Bike</option>
+                  <option value="scooter">Scooter</option>
                   <option value="bicycle">Bicycle</option>
                   <option value="car">Car</option>
                 </select>

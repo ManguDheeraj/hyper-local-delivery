@@ -77,12 +77,17 @@ router.post('/register', async (req, res) => {
         });
       }
 
-      rider = await Rider.create({
-        user: user._id,
-        name: user.name,
-        phone,
-        vehicleType: vehicleType || 'bike',
-      });
+      try {
+        rider = await Rider.create({
+          user: user._id,
+          name: user.name,
+          phone,
+          vehicleType: vehicleType || 'bike',
+        });
+      } catch (riderErr) {
+        await User.findByIdAndDelete(user._id);
+        throw riderErr; // let the global catch handle the validation response
+      }
     }
 
     // --- Respond with token + user info -----------------------------------
