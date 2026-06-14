@@ -32,7 +32,17 @@ router.get('/', async (req, res) => {
     // Build dynamic filter object
     const filter = {};
     if (status) filter.status = status;
-    if (rider) filter.assignedRider = rider;
+    
+    if (req.user.role === 'rider') {
+      const riderDoc = await Rider.findOne({ user: req.user.id });
+      if (riderDoc) {
+        filter.assignedRider = riderDoc._id;
+      } else {
+        return res.json({ success: true, count: 0, orders: [] });
+      }
+    } else if (rider) {
+      filter.assignedRider = rider;
+    }
 
     const orders = await Order.find(filter)
       .populate('assignedRider', 'name phone vehicleType isOnline currentLocation')
@@ -53,7 +63,7 @@ router.get('/', async (req, res) => {
 // GET /api/orders/stats
 // Returns aggregate statistics for the dashboard
 // ─────────────────────────────────────────────────────────────────────────
-router.get('/stats', async (req, res) => {
+router.get('/stats', authorize('admin'), async (req, res) => {
   try {
     // Total number of orders
     const totalOrders = await Order.countDocuments();
@@ -240,6 +250,13 @@ router.put('/:id/status', async (req, res) => {
         success: false,
         message: 'Order not found',
       });
+    }
+
+    if (req.user.role === 'rider') {
+      const riderDoc = await Rider.findOne({ user: req.user.id });
+      if (!riderDoc || order.assignedRider?.toString() !== riderDoc._id.toString()) {
+        return res.status(403).json({ success: false, message: 'Forbidden: Order not assigned to you' });
+      }
     }
 
     // --- Status-specific side-effects ------------------------------------

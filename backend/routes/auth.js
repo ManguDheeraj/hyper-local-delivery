@@ -101,6 +101,8 @@ router.post('/register', async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        riderId: rider ? rider._id : undefined,
+        isOnline: rider ? rider.isOnline : undefined,
       },
       rider: rider
         ? { _id: rider._id, phone: rider.phone, vehicleType: rider.vehicleType }
@@ -180,6 +182,8 @@ router.post('/login', async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        riderId: riderData ? riderData._id : undefined,
+        isOnline: riderData ? riderData.isOnline : undefined,
       },
       rider: riderData,
     });
@@ -217,6 +221,8 @@ router.get('/me', protect, async (req, res) => {
         email: user.email,
         role: user.role,
         createdAt: user.createdAt,
+        riderId: riderProfile ? riderProfile._id : undefined,
+        isOnline: riderProfile ? riderProfile.isOnline : undefined,
       },
       rider: riderProfile,
     });

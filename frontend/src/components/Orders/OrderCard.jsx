@@ -14,7 +14,7 @@ const STATUS_LABELS = {
 
 const STATUS_OPTIONS = ['pending', 'assigned', 'dispatched', 'picked-up', 'in-transit', 'delivered', 'cancelled'];
 
-export default function OrderCard({ order, riders = [], onAssign, onStatusChange, onCardClick }) {
+export default function OrderCard({ order, riders = [], userRole, onAssign, onStatusChange, onCardClick }) {
   const [assigning, setAssigning] = useState(false);
 
   const statusClass = order.status?.replace(/\s+/g, '-').toLowerCase() || 'pending';
@@ -79,7 +79,7 @@ export default function OrderCard({ order, riders = [], onAssign, onStatusChange
         <span className="order-card-items">{itemsCount} item{itemsCount !== 1 ? 's' : ''}</span>
 
         <div className="order-card-actions">
-          {order.status === 'pending' && riders.length > 0 && (
+          {userRole !== 'rider' && order.status === 'pending' && riders.length > 0 && (
             <select
               className="form-select order-card-select"
               onChange={(e) => handleAssign(e.target.value)}

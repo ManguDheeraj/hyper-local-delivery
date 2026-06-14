@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { HiOutlineBell, HiOutlineSearch } from 'react-icons/hi';
+import { toggleRiderOnline } from '../../services/api';
 import './Header.css';
 
 const PAGE_TITLES = {
@@ -15,8 +16,22 @@ const PAGE_TITLES = {
 export default function Header() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [showNotifs, setShowNotifs] = useState(false);
+  const [toggling, setToggling] = useState(false);
+
+  const handleToggleOnline = async () => {
+    if (!user?.riderId) return;
+    setToggling(true);
+    try {
+      const res = await toggleRiderOnline(user.riderId);
+      updateUser({ isOnline: res.data?.data?.isOnline ?? res.data?.rider?.isOnline ?? !user.isOnline });
+    } catch {
+      /* ignore */
+    } finally {
+      setToggling(false);
+    }
+  };
 
   const title =
     PAGE_TITLES[pathname] ||
@@ -47,6 +62,22 @@ export default function Header() {
             id="header-search-input"
           />
         </div>
+
+        {user?.role === 'rider' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '16px' }}>
+            <span className={`badge ${user.isOnline ? 'badge-online' : 'badge-offline'}`}>
+              {user.isOnline ? 'Online' : 'Offline'}
+            </span>
+            <button
+              className="btn btn-sm"
+              onClick={handleToggleOnline}
+              disabled={toggling}
+              style={{ padding: '4px 10px', fontSize: '0.8rem' }}
+            >
+              {toggling ? '...' : (user.isOnline ? 'Go Offline' : 'Go Online')}
+            </button>
+          </div>
+        )}
 
         <div className="header-notif-wrapper" style={{ position: 'relative' }}>
           <button 

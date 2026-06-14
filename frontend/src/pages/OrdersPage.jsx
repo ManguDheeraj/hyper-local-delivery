@@ -3,6 +3,7 @@ import OrderList from '../components/Orders/OrderList';
 import CreateOrderModal from '../components/Orders/CreateOrderModal';
 import OrderDetailsModal from '../components/Orders/OrderDetailsModal';
 import { getOrders, getRiders, createOrder, assignRider, updateOrderStatus } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import useSocket from '../hooks/useSocket';
 import { HiOutlinePlus, HiOutlineSearch } from 'react-icons/hi';
 import './OrdersPage.css';
@@ -17,6 +18,7 @@ const STATUS_TABS = [
 ];
 
 export default function OrdersPage() {
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [riders, setRiders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +44,7 @@ export default function OrdersPage() {
   }, [activeTab]);
 
   const fetchRiders = useCallback(async () => {
+    if (user?.role === 'rider') return;
     try {
       const res = await getRiders();
       const data = res.data?.data || res.data?.riders || res.data || [];
@@ -107,13 +110,15 @@ export default function OrdersPage() {
           <h3>Orders</h3>
           <p className="text-secondary text-sm">{orders.length} total orders</p>
         </div>
-        <button
-          className="btn btn-primary"
-          onClick={() => setModalOpen(true)}
-          id="create-order-btn"
-        >
-          <HiOutlinePlus size={16} /> New Order
-        </button>
+        {user?.role !== 'rider' && (
+          <button
+            className="btn btn-primary"
+            onClick={() => setModalOpen(true)}
+            id="create-order-btn"
+          >
+            <HiOutlinePlus size={16} /> New Order
+          </button>
+        )}
       </div>
 
       {/* Search + Tabs */}
@@ -155,6 +160,7 @@ export default function OrdersPage() {
           <OrderList
             orders={filtered}
             riders={riders}
+            userRole={user?.role}
             onAssign={handleAssign}
             onStatusChange={handleStatusChange}
             onCardClick={handleCardClick}
