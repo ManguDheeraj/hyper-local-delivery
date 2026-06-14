@@ -121,16 +121,10 @@ app.use('/api/*', (_req, res) => {
   res.status(404).json({ success: false, message: 'API route not found' });
 });
 
-// ── Production: serve frontend static files ─────────────────────────────
-if (NODE_ENV === 'production') {
-  const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
-  app.use(express.static(frontendPath));
-
-  // SPA catch-all – send index.html for any non-API route
-  app.get('*', (_req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
-  });
-}
+// ── Root Endpoint ─────────────────────────────────────────────────────────
+app.get('/', (_req, res) => {
+  res.send('Hyper-Local Delivery Backend is running.');
+});
 
 // ── Global error handler ────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-vars
