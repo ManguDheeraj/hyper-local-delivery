@@ -51,7 +51,7 @@ export default function DashboardPage() {
       setRiders(ridersList);
 
       if (statsRes?.data) {
-        const s = statsRes.data.data || statsRes.data;
+        const s = statsRes.data.stats || statsRes.data.data || statsRes.data;
         setStats({
           totalOrders: s.totalOrders ?? ordersList.length,
           activeRiders: s.activeRiders ?? ridersList.filter((r) => r.isOnline || r.isAvailable).length,

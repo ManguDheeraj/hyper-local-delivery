@@ -62,7 +62,7 @@ export const updateOrderStatus = (orderId, status) =>
 export const getRiders = (params) => api.get('riders', { params });
 export const getRider = (id) => api.get(`riders/${id}`);
 export const updateRiderLocation = (id, location) =>
-  api.put(`riders/${id}/location`, { location });
+  api.put(`riders/${id}/location`, location);
 export const toggleRiderOnline = (id) =>
   api.put(`riders/${id}/toggle-online`);
 export const getRiderEarnings = (id, params) =>

@@ -124,13 +124,13 @@ app.use('/api/*', (_req, res) => {
 // ── Production: serve frontend static files ─────────────────────────────
 if (NODE_ENV === 'production') {
   const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
-  //app.use(express.static(frontendPath));
+  app.use(express.static(frontendPath));
 
   // SPA catch-all – send index.html for any non-API route
- // app.get('*', (_req, res) => {
-   // res.sendFile(path.join(frontendPath, 'index.html'));
- // });
-};
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+}
 
 // ── Global error handler ────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-vars

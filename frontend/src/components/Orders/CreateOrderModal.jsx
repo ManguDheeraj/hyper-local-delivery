@@ -48,7 +48,7 @@ export default function CreateOrderModal({ open, onClose, onSubmit }) {
           quantity: Number(it.quantity),
           price: Number(it.price),
         })),
-        totalAmount,
+        amount: totalAmount,
       });
       onClose();
       setForm({ customerName: '', customerPhone: '', deliveryAddress: '', notes: '' });
