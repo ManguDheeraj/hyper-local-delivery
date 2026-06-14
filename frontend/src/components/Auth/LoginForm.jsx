@@ -25,11 +25,15 @@ export default function LoginForm() {
         await login(form.email, form.password);
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        'Something went wrong. Please try again.'
-      );
+      if (!err.response) {
+        setError('Network Error: Cannot connect to the backend. Please ensure your backend is running, and if deployed, that VITE_API_URL is set correctly in Vercel and CORS_ORIGIN is set in Render.');
+      } else {
+        setError(
+          err.response.data?.message ||
+          err.response.data?.error ||
+          'Something went wrong. Please try again.'
+        );
+      }
     } finally {
       setLoading(false);
     }

@@ -155,29 +155,27 @@ hyper-local-delivery/
 
 ---
 
-## 🌐 Deployment (Render)
+## 🌐 Deployment (Split: Frontend on Vercel & Backend on Render)
 
-### One-Click Deploy
+### 1. Backend Deployment (Render)
+1. Go to the [Render Dashboard](https://dashboard.render.com/) and click **New** → **Blueprint**.
+2. Connect your GitHub repository.
+3. Render will read the `render.yaml` configuration and set up the services automatically.
+4. Set the following environment variables in the Render Dashboard under Environment settings:
+   - `MONGO_URI` — Your MongoDB Atlas connection string (e.g., `mongodb+srv://...`)
+   - `JWT_SECRET` — A secure secret key for JWT token generation.
+   - `CORS_ORIGIN` — Your Vercel frontend URL (e.g., `https://hyper-dispatch.vercel.app`).
 
-1. Push your code to GitHub
-2. Go to [Render Dashboard](https://dashboard.render.com/)
-3. Click **New** → **Blueprint**
-4. Connect your repo — Render reads `render.yaml` automatically
-5. Set environment variables in the Render dashboard:
-   - `MONGO_URI` — Your MongoDB Atlas connection string
-   - `VITE_GOOGLE_MAPS_KEY` — Your Google Maps API key
-
-### Manual Deploy
-
-```bash
-# Build for production
-npm run build
-
-# Start production server
-NODE_ENV=production npm start
-```
-
-The backend serves the frontend build as static files in production.
+### 2. Frontend Deployment (Vercel)
+1. Go to the [Vercel Dashboard](https://vercel.com/) and click **Add New** → **Project**.
+2. Select your repository.
+3. Configure the following Project settings:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `frontend`
+4. Expand **Environment Variables** and add:
+   - `VITE_API_URL` — Your Render backend API URL (e.g., `https://hyper-local-backend.onrender.com`).
+   - `VITE_GOOGLE_MAPS_KEY` — Your Google Maps API key (optional).
+5. Click **Deploy**. Vercel will build the React SPA using the `frontend` folder.
 
 ---
 
